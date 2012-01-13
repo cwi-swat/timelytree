@@ -12,6 +12,7 @@ public final class TreeNode {
 	// input
 	public double width, height;
 	public TreeNode[] children;
+	public double hgap, vgap;
 	// output
 	public double x,y;
 	
@@ -85,5 +86,49 @@ public final class TreeNode {
 		for(TreeNode node : children){
 			node.allNodes(nodes);
 		}
+	}
+	
+	public int getDepth(){
+		int res = 1;
+		for(TreeNode child : children){
+			res = Math.max(res, child.getDepth() + 1);
+		}
+		return res;
+	}
+	
+	public void addGap(double hgap,double vgap){
+		this.hgap += hgap;
+		this.vgap += vgap;
+		this.width+=2*hgap;
+		this.height+=2*vgap;
+		for(TreeNode child : children){
+			child.addGap(hgap,vgap);
+		}
+	}
+	
+	public void addSize(double hsize,double vsize){
+		this.width+=hsize;
+		this.height+=vsize;
+		for(TreeNode child : children){
+			child.addSize(hsize,vsize);
+		}
+	}
+	
+	public void addGapPerDepth(int gapPerDepth, int depth,int maxDepth){
+		this.hgap += (maxDepth-depth)*gapPerDepth;
+		this.width+=2* (maxDepth-depth)*gapPerDepth;
+		for(TreeNode child : children){
+			child.addGapPerDepth(gapPerDepth,depth+1,maxDepth);
+		}
+	}
+	
+	public void print(){
+		System.out.printf("new TreeNode(%f,%f ",width,height);
+		for(TreeNode child : children){
+			System.out.printf(", ");
+			child.print();
+		}
+		System.out.printf(")");
+		
 	}
 }

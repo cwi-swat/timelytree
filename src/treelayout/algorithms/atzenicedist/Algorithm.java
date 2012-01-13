@@ -1,8 +1,7 @@
-package treelayout.algorithms.atze;
-
-
+package treelayout.algorithms.atzenicedist;
 public class Algorithm {
-
+	
+	static final double GapPerDepth = 20;
 	
 	static final class OutlineElement{
 		double x;
@@ -63,7 +62,7 @@ public class Algorithm {
 			right.addAbove(node.x + node.width, node.y + node.height);
 		}
 		
-		double merge(Silhoutte toMerge){
+		double merge(Silhoutte toMerge, double extraDist){
 			OutlineElement lr = right.first;
 			OutlineElement rl = toMerge.left.first;
 			if(lr == null){
@@ -87,6 +86,7 @@ public class Algorithm {
 					rl = rl.next;
 				}
 			}
+			minDistance+=extraDist;
 			toMerge.right.shift(minDistance);
 			if(lr == null && rl == null){
 				right = toMerge.right;
@@ -113,7 +113,7 @@ public class Algorithm {
 		for(Node child : tree.children){
 			child.y = tree.y + tree.height;
 			Silhoutte childSil = doRelativeLayout(child);
-			double minDistance = result.merge(childSil);
+			double minDistance = result.merge(childSil, (tree.depthTillLowest-2) * GapPerDepth);
 			child.x += minDistance;
 			child.distanceFromLeftMostSibling = minDistance;
 		}

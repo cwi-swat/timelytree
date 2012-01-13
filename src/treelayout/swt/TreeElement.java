@@ -1,5 +1,6 @@
 package treelayout.swt;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlEvent;
@@ -10,7 +11,9 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -34,11 +37,14 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 	double vgap = 15;
 	GenerateTrees treeGen;
 	Algorithms algorithmChoice;
+	Random rand;
+	
+	public static int SEED = 42;
 	
 	public TreeElement(Composite parent) {
 		super(parent, SWT.H_SCROLL | SWT.V_SCROLL);
 		algorithmChoice = Algorithms.VanDerPloeg;
-		treeGen = new GenerateTrees(30,2000, 0,2, 20, 200, 20, 200, 10);
+		treeGen = new GenerateTrees(25,2000, 1,3, 30, 300, 30, 300, 10);
 		addPaintListener(this);
 		getHorizontalBar().addSelectionListener(this);
 		getVerticalBar().addSelectionListener(this);
@@ -46,6 +52,7 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 		addControlListener(this);	
 		addKeyListener(this);
 		addListener(SWT.MouseVerticalWheel, this);
+		
 	}
 	
 	
@@ -55,7 +62,10 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 			long start = System.currentTimeMillis();
 			long now = System.currentTimeMillis();
 			
-			tree = treeGen.generate();
+//			tree = treeGen.generate();
+			tree = new TreeNode(187.828942,311.710997 , new TreeNode(141.901729,212.010992 , new TreeNode(228.234730,196.928556 ), new TreeNode(47.009715,310.122316 ), new TreeNode(77.505928,201.409231 )), new TreeNode(306.716650,262.018437 , new TreeNode(125.735333,114.985398 , new TreeNode(205.432359,222.264511 , new TreeNode(239.148993,194.980397 , new TreeNode(173.781810,199.913732 ), new TreeNode(256.427942,299.443952 ), new TreeNode(288.945889,198.889672 )), new TreeNode(293.322927,268.542733 , new TreeNode(176.426141,281.251008 ), new TreeNode(286.747910,253.515736 ))), new TreeNode(173.145612,93.873724 , new TreeNode(107.031465,108.066558 , new TreeNode(219.689018,235.259037 , new TreeNode(237.127111,338.564635 ))), new TreeNode(88.145160,243.449795 , new TreeNode(249.534650,189.766751 )), new TreeNode(66.716614,118.708992 , new TreeNode(168.352935,334.241448 , new TreeNode(213.308232,320.346280 ), new TreeNode(96.354818,178.254284 )))))));
+//			tree.addSize(-10, -40);
+			tree.addGap(5, 20);
 //			tree = new TreeNode(100, 100, new TreeNode(100,100,new TreeNode(200,100)), new TreeNode(100,200));
 //			tree = NastyExamples.nestedLeftFree(4);
 //			tree = NastyExamples.simpleFree2();
@@ -100,6 +110,7 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 		System.out.printf("Layout in %d ms \n\n",dur);
 		
 		tree.normalizeX();
+
 //		BoundingBox b = SuperSnel.layout(tree);
 		BoundingBox b = tree.getBoundingBox();
 //		Layout.doLayoutConstraints(tree, null, 0);
@@ -158,22 +169,23 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 	}
 
 
-	private static final double GAP = 6;
 	
 	void paintTree(TreeNode root, GC gc,Rectangle r){
 //		if( !(root.x + root.width - xOffset < 0 || (root.x - xOffset) *zoom > r.width 
 //				|| root.y + root.height + yOffset - yOffset < 0 || (root.y + offsetY - yOffset )*zoom > r.width)){
-			gc.setAlpha(100);
-			gc.fillRectangle(roundInt(zoom * (root.x + GAP - xOffset)), roundInt(zoom * (root.y + GAP -yOffset)), roundInt(zoom * (root.width - 2*GAP)), roundInt(zoom * (root.height - 2 * GAP)));
+//			gc.setAlpha(100);
+		Color c = new Color(gc.getDevice(), new RGB((int)((rand.nextDouble() * 150) ), (int)((rand.nextDouble() * 150)), (int)((rand.nextDouble() * 150) )));
+		gc.setBackground(c);
+			gc.fillRectangle(roundInt(zoom * (root.x + root.hgap - xOffset)), roundInt(zoom * (root.y + root.vgap -yOffset)), roundInt(zoom * (root.width - 2*root.hgap)), roundInt(zoom * (root.height - 2 * root.vgap)));
 			gc.setAlpha(255);
-			gc.drawRectangle(roundInt(zoom * (root.x + GAP - xOffset)), roundInt(zoom * (root.y + GAP -yOffset)), roundInt(zoom * (root.width - 2*GAP)), roundInt(zoom * (root.height - 2 * GAP)));
+			gc.drawRectangle(roundInt(zoom * (root.x + root.hgap - xOffset)), roundInt(zoom * (root.y + root.vgap -yOffset)), roundInt(zoom * (root.width - 2*root.hgap)), roundInt(zoom * (root.height - 2 * root.vgap)));
 //		}
+			c.dispose();
 		if(root.children.length > 0){
-			double endYRoot =  root.y + root.height -GAP ;
-			double kidY = endYRoot + GAP ;
+			double endYRoot =  root.y + root.height -root.vgap ;
 			double rootMiddle = root.x + root.width/2.0;
 			
-			double middleY = endYRoot + GAP;
+			double middleY = endYRoot + root.vgap;
 			gc.drawLine(roundInt(zoom *(rootMiddle-xOffset)), roundInt(zoom *( endYRoot -yOffset)), roundInt(zoom * (rootMiddle-xOffset)),roundInt(zoom * (middleY -yOffset)) );
 			TreeNode firstKid = root.children[0];
 			double middleFirstKid =  firstKid.x + firstKid.width/2.0;
@@ -184,7 +196,7 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 			for(TreeNode kid : root.children){
 				double middleKid = kid.x + kid.width/2.0;
 				paintTree(kid, gc, r);
-				gc.drawLine(roundInt(zoom *(middleKid-xOffset)), roundInt(zoom *(middleY-yOffset)), roundInt(zoom *(middleKid-xOffset)), roundInt(zoom *( kid.y + GAP -yOffset)));
+				gc.drawLine(roundInt(zoom *(middleKid-xOffset)), roundInt(zoom *(middleY-yOffset)), roundInt(zoom *(middleKid-xOffset)), roundInt(zoom *( kid.y + kid.vgap -yOffset)));
 			}
 		}
 	}
@@ -196,8 +208,8 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 		Rectangle r = getClientArea();
 		e.gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		e.gc.fillRectangle(r);
-		e.gc.setBackground(getDisplay().getSystemColor(SWT.COLOR_BLUE));
 		e.gc.setForeground(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		rand = new Random(SEED);
 		paintTree(tree, e.gc, r);
 	
 	}
@@ -244,6 +256,9 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 			algorithmChoice = Algorithms.values()[(algorithmChoice.ordinal()+1) % Algorithms.values().length];
 			System.out.printf("Current : %s\n", algorithmChoice);
 			doLayout();
+		} else if(e.keyCode == 'p'){
+			tree.print();
+			System.out.printf("\n");
 		}
 		setScrollBars();
 		redraw();
@@ -251,7 +266,6 @@ public class TreeElement extends Composite implements SelectionListener, PaintLi
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

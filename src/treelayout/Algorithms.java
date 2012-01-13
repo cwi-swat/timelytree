@@ -5,6 +5,7 @@ import treelayout.algorithms.bloeschreingold.BloeschReingold;
 import treelayout.algorithms.buchheimwalker.BuchheimWalker;
 import treelayout.algorithms.miyaderamasud.MiyaderaMasud;
 import treelayout.algorithms.atzefixeddistfirstchild.VanDerPloegFixedDistFromFirstChild;
+import treelayout.algorithms.atzenicedist.VanDerPloegNiceDist;
 import treelayout.interfaces.TreeLayoutAlgorithm;
 import treelayout.interfaces.TreeNode;
 
@@ -14,7 +15,8 @@ public enum Algorithms {
 	BuchHeimWalker(new BuchheimWalker()),
 	BloeschReingold(new BloeschReingold()),
 	MiyaderaMasud(new MiyaderaMasud()),
-	VanDerPloegFixedDistFromFirstChild(new VanDerPloegFixedDistFromFirstChild());
+	VanDerPloegFixedDistFromFirstChild(new VanDerPloegFixedDistFromFirstChild()),
+	VanDerPloegNiceDist(new VanDerPloegNiceDist());
 	
 
 	public static final Algorithms[] equallySized = {Algorithms.VanDerPloeg, Algorithms.BuchHeimWalker};
