@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import treelayout.Algorithms;
 import treelayout.GenerateTrees;
-import treelayout.algorithms.atze.Algorithm;
-import treelayout.algorithms.atze.VanDerPloeg;
 import treelayout.algorithms.buchheimwalker.BuchheimWalker;
 import treelayout.interfaces.TreeLayoutAlgorithm;
 import treelayout.interfaces.TreeNode;

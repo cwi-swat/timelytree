@@ -1,28 +1,24 @@
 package treelayout;
 
-import treelayout.algorithms.atze.VanDerPloeg;
+import treelayout.algorithms.ours.*;
 import treelayout.algorithms.bloeschreingold.BloeschReingold;
 import treelayout.algorithms.buchheimwalker.BuchheimWalker;
 import treelayout.algorithms.miyaderamasud.MiyaderaMasud;
-import treelayout.algorithms.atzefixeddistfirstchild.VanDerPloegFixedDistFromFirstChild;
-import treelayout.algorithms.atzenicedist.VanDerPloegNiceDist;
 import treelayout.interfaces.TreeLayoutAlgorithm;
 import treelayout.interfaces.TreeNode;
 
 public enum Algorithms {
 
-	VanDerPloeg(new VanDerPloeg()),
+	Ours(new Ours(new CenterGetPos())),
 	BuchHeimWalker(new BuchheimWalker()),
 	BloeschReingold(new BloeschReingold()),
-	MiyaderaMasud(new MiyaderaMasud()),
-	VanDerPloegFixedDistFromFirstChild(new VanDerPloegFixedDistFromFirstChild()),
-	VanDerPloegNiceDist(new VanDerPloegNiceDist());
+	MiyaderaMasud(new MiyaderaMasud());
 	
 
-	public static final Algorithms[] equallySized = {Algorithms.VanDerPloeg, Algorithms.BuchHeimWalker};
-	public static final Algorithms[] arbitrarilySized = {Algorithms.VanDerPloeg, Algorithms.BloeschReingold, Algorithms.MiyaderaMasud, Algorithms.VanDerPloegFixedDistFromFirstChild};	
-	public static final Algorithms[] arbitrarilySizedMiddle = {Algorithms.VanDerPloeg, Algorithms.BloeschReingold};	
-	public static final Algorithms[] arbitrarilySizedFixedDist= {Algorithms.VanDerPloegFixedDistFromFirstChild, Algorithms.MiyaderaMasud};	
+	public static final Algorithms[] equallySized = {Algorithms.Ours, Algorithms.BuchHeimWalker};
+	public static final Algorithms[] arbitrarilySized = {Algorithms.Ours, Algorithms.BloeschReingold, Algorithms.MiyaderaMasud, Algorithms.Ours};	
+	public static final Algorithms[] arbitrarilySizedMiddle = {Algorithms.Ours, Algorithms.BloeschReingold};	
+	public static final Algorithms[] arbitrarilySizedFixedDist= {Algorithms.Ours, Algorithms.MiyaderaMasud};	
 	TreeLayoutAlgorithm alg;
 	
 	Algorithms(TreeLayoutAlgorithm alg){
