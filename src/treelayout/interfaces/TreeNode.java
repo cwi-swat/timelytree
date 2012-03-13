@@ -4,9 +4,6 @@ import java.util.ArrayList;
 
 import treelayout.BoundingBox;
 
-
-
-
 public final class TreeNode {
 
 	// input

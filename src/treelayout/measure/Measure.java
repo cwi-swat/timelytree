@@ -2,9 +2,9 @@ package treelayout.measure;
 
 import java.util.Arrays;
 
+import treelayout.AlgorithmTypes;
 import treelayout.Algorithms;
 import treelayout.GenerateTrees;
-import treelayout.algorithms.buchheimwalker.BuchheimWalker;
 import treelayout.interfaces.TreeLayoutAlgorithm;
 import treelayout.interfaces.TreeNode;
 
@@ -17,8 +17,9 @@ public class Measure {
 	public static long SEED = 42;
 	
 	static long timeLayout(TreeNode tree, TreeLayoutAlgorithm alg){
+		Object converted = alg.convert(tree);
 		long start = System.currentTimeMillis();
-		alg.run(tree);
+		alg.runOnConverted(converted);
 		long now = System.currentTimeMillis();
 		System.gc();
 		return now - start;
@@ -52,7 +53,7 @@ public class Measure {
 		for(int i = 0; i < MAX_SIZE; i+= INCREMENT){
 			for(Algorithms alg : algs){
 				GenerateTrees gen = new GenerateTrees(i, 500000, 0,6, 10, 10, 10, 10, SEED);
-				System.out.printf("%40s %15d %15d\n",alg.toString(), i, medianOfTests(gen, alg.getAlgorithm(), NR_TESTS));
+				System.out.printf("%40s %15d %15d\n",alg.toString(), i, medianOfTests(gen, alg.alg, NR_TESTS));
 			}
 		}
 	}
@@ -61,14 +62,16 @@ public class Measure {
 		for(int i = 0; i < MAX_SIZE; i+= INCREMENT){
 			for(Algorithms alg : algs){
 				GenerateTrees gen = new GenerateTrees(i, 500000, 0,6, 1, 5000, 1,5000, SEED);
-				System.out.printf("%40s %15d %15d\n",alg.toString(), i, medianOfTests(gen, alg.getAlgorithm(), NR_TESTS));
+				System.out.printf("%40s %15d %15d\n",alg.toString(), i, medianOfTests(gen, alg.alg, NR_TESTS));
 			}
 		}
 	}
 	
 	public static void main(String[] argv){
 		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-		measureArbitrarilySized(Algorithms.arbitrarilySizedFixedDist);
+		measureEquallySized(AlgorithmTypes.EQUALLY_SIZED.algorithms);
+		measureArbitrarilySized(AlgorithmTypes.ARBIT_SIZED_FIXED_DIST.algorithms);
+		measureArbitrarilySized(AlgorithmTypes.ARBIT_SIZED_MIDDLE.algorithms);
 		
 	}
 	

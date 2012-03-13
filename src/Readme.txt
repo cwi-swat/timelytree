@@ -1,7 +1,35 @@
-package treelayout.algorithms.buchheimwalker;
 
-/*
- * 
+*******************************************************************************
+                   This code accompanies the paper:
+                "On the timely drawing of tidy trees" 
+                       by A.J. van der Ploeg
+*******************************************************************************
+
+The code in this repository in the public domain, except the code
+in the treelayout.algorithms.buchheimwalker package, which is taken from
+the prefuse (http://prefuse.org) library.
+
+The implementation of the algorithm can be found in the 
+treelayout.algorithms.ours package. Other algorithms named in the paper
+can be found in treelayout.algorithms.
+
+In treelayout.measure package contains code to reproduce the measurements
+presented in the paper.
+
+The package treelayout.swt contains an visual displayer of tree layouts. It 
+required SWT to run. 
+Press 'a' to generate a new tree.
+Press 'q' to switch between tree types:
+	*equally sized, root middle between children
+	*arbitrarily sized, root middle between children
+	*arbitrarily sized, root fixed distance from first child
+Press 'a' to switch to another algorithm.
+
+
+ 
+The code in the treelayout.algorithms.buchheimwalker package has the following
+copyright notice:
+
   Copyright (c) 2004-2007 Regents of the University of California.
   All rights reserved.
 
@@ -31,55 +59,4 @@ package treelayout.algorithms.buchheimwalker;
   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
   SUCH DAMAGE.
-   
-  Originally from the prefuse library. http://prefuse.org
- */
-
-public class NodeItem {
-
-	public int number  = -2;
-	public double prelim;
-	public double mod;
-	public NodeItem ancestor  = null;
-	public NodeItem thread  = null;
-	public double change;
-	public double shift;
-	
-	double width, height;
-	double x, y;
-	NodeItem[] children;
-	NodeItem parent;
-	NodeItem nextSibling;
-	NodeItem prevSibling;
-	
-	NodeItem(){
-		init();
-	}
-	   
-    public void init() {
-        ancestor = this;
-        number = -1;
-    }
-
-
-	public NodeItem getFirstChild() {
-		if(children.length != 0){
-			return children[0];
-		}
-		return null;
-	}
-
-	public NodeItem getLastChild() {
-		if(children.length != 0){
-			return children[children.length-1];
-		}
-		return null;
-	}
-
-	public void clear() {
-         number = -2;
-         prelim = mod = shift = change = 0;
-         ancestor = thread = null;
-     }
-
-}
+ 

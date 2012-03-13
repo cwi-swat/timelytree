@@ -3,7 +3,7 @@ package treelayout.algorithms.miyaderamasud;
 public class Algorithm {
 	
 	
-	static final double ROOT_FROM_FIRST_CHILD = 6;
+	public static final double ROOT_FROM_FIRST_CHILD = MiyaderaMasud.ROOT_FROM_FIRST_CHILD;
 	
 	class LowerEnvelope{
 		double x;

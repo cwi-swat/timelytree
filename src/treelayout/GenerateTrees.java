@@ -4,9 +4,6 @@ import java.util.Random;
 
 import treelayout.interfaces.TreeNode;
 
-
-
-
 public class GenerateTrees {
 	
 	
@@ -41,7 +38,6 @@ public class GenerateTrees {
 
 
 	private TreeNode generate(int nrElements) {
-		int initElems = nrElements;
 		double width = getRandomInRange(minWidth,maxWidth);
 		double height = getRandomInRange(minHeight,maxHeight);
 		TreeNode[] children;
@@ -65,13 +61,8 @@ public class GenerateTrees {
 			children[i] = generate(n+1);
 			
 		}
-		
 		children[children.length-1] = generate(nrElements - totChild);
 		TreeNode res = new TreeNode(width,height,children);
-		int s = res.size();
-		if(s != initElems){
-			System.out.printf("WEIRD SHIT! %d %d\n", initElems, s);
-		}
 		return res;
 	}
 									  

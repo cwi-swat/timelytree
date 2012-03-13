@@ -11,25 +11,6 @@ public class Ours implements TreeLayoutAlgorithm{
 	public Ours(IGetPos getPos) {
 		this.getPos = getPos;
 	}
-
-	@Override
-	public void run(TreeNode root){
-		Node converted = convert(root);
-		Algorithm.doAllLayout(converted, getPos);
-
-		convertBack(converted,root);
-	}
-	
-	private Node convert(TreeNode root) {
-		Node rroot = convertNodes(root);
-		setYs(rroot,height(rroot));
-		return rroot;
-	}
-
-	private void convertBack(Node converted,TreeNode root) {
-		setYsBack(converted,0);
-		convertBackNodes(converted,root);
-	}
 	
 	private void convertBackNodes(Node converted, TreeNode root) {
 		root.x = converted.x;
@@ -42,7 +23,7 @@ public class Ours implements TreeLayoutAlgorithm{
 	private Node convertNodes(TreeNode root) {
 		Node[] children = new Node[root.children.length];
 		for(int i = 0 ; i < root.children.length ; i++){
-			children[i] = convert(root.children[i]);
+			children[i] = convertNodes(root.children[i]);
 		}
 		return new Node(root.width,root.height,children);
 	}
@@ -69,5 +50,25 @@ public class Ours implements TreeLayoutAlgorithm{
 		for(Node child : root.c){
 			setYs(child, y);
 		}
+	}
+
+	@Override
+	public Object convert(TreeNode root) {
+		Node rroot = convertNodes(root);
+		setYs(rroot,height(rroot));
+		return rroot;
+	}
+
+	@Override
+	public void convertBack(Object convertedO, TreeNode root) {
+		Node converted = (Node)convertedO;
+		setYsBack(converted,0);
+		convertBackNodes(converted,root);
+	}
+
+	@Override
+	public void runOnConverted(Object root) {
+		Algorithm.doAllLayout((Node)root, getPos);
+		
 	}
 }

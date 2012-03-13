@@ -13,7 +13,7 @@ public class FixedDistFromFirstChildPos implements IGetPos {
 		if(node.c.length == 0){
 			return 0;
 		} else {
-			return node.c[0].x + dist;
+			return node.c[0].x + node.c[0].s + dist;
 		}
 	}
 
